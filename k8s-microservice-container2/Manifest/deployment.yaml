@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: poojitha-app-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: poojitha-app
+  template:
+    metadata:
+      labels:
+        app: poojitha-app
+    spec:
+      nodeSelector:
+        cloud.google.com/gke-nodepool: default-pool
+      volumes:
+        - name: poojitha-pv
+
+      containers:
+        - name: container-1
+          image: us-central1-docker.pkg.dev/kubernetes-assignment-428501/k8-artifactregistry-container1/k8-container1:v2
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 6000
+          volumeMounts:
+            - name: poojitha-pv
+              mountPath: /poojitha_PV_dir
+
+        - name: container-2
+          image: us-central1-docker.pkg.dev/kubernetes-assignment-428501/k8-artifactregistry-container2/k8-container2:v2
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 4000
+          volumeMounts:
+            - name: poojitha-pv
+              mountPath: /poojitha_PV_dir

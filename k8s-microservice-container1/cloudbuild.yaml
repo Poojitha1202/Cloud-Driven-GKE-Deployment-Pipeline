@@ -1,0 +1,29 @@
+steps:
+  - name: "gcr.io/cloud-builders/docker"
+    args:
+      [
+        "build",
+        "-t",
+        "us-central1-docker.pkg.dev/kubernetes-assignment-428501/k8-artifactregistry-container1/k8-container1:v2",
+        ".",
+      ]
+
+  - name: "gcr.io/cloud-builders/docker"
+    args:
+      [
+        "push",
+        "us-central1-docker.pkg.dev/kubernetes-assignment-428501/k8-artifactregistry-container1/k8-container1:v2",
+      ]
+
+  - name: "gcr.io/cloud-builders/gke-deploy"
+    args:
+      - run
+      - --filename=./Manifest/
+      - --image=us-central1-docker.pkg.dev/kubernetes-assignment-428501/k8-artifactregistry-container1/k8-container1:v2
+      - --location=us-central1
+      - --cluster=k8-cluster
+
+options:
+  logging: NONE
+
+serviceAccount: "k8-assignment-serviceaccount@kubernetes-assignment-428501.iam.gserviceaccount.com"
